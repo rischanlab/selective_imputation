@@ -376,7 +376,7 @@ ax.plot(mean4, lw = 1, color = '#ece554', alpha = 1, label = 'q4: readmitted = N
 ax.fill_between(t, lb1, ub1, color = '#539caf', alpha = 0.4)
 ax.fill_between(t, lb2, ub2, color = '#b65332', alpha = 0.4)
 ax.fill_between(t, lb3, ub3, color = '#5be19a', alpha = 0.4)
-ax.fill_between(t, lb4, ub4, color = '#e6a3ba', alpha = 0.4)
+ax.fill_between(t, lb4, ub4, color = '#ffff80', alpha = 0.4)
 
 # Label the axes and provide a title
 ax.set_title("Impact of percentage of missing on Effectiveness, 95% CI, k = 5")

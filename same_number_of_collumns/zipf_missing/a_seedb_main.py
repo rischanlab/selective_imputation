@@ -30,7 +30,7 @@ if __name__ == "__main__":
     #     print("done")
     #mlist = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
     a_list = [1.1, 1.2, 1.3, 1.4, 1.5, 1.7]
-    mlist = [0.4,0.5]
+    mlist = [0.6,0.7]
     mytable = []
     for i in mlist:
         for a in a_list:
