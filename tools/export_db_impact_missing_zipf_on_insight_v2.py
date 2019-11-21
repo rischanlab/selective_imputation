@@ -47,23 +47,25 @@ def missing_data_attr(db, N_samples, alpha, seed, percent):
     gender = df['gender'].values
     gender = dropout(gender, percent*rank[0], seed)
 
+    age = df['age'].values
+    age = dropout(age, percent*rank[1], seed)
+
+
     #admission_source_id = df['admission_source_id'].values
     #admission_source_id = dropout(admission_source_id, rank[2], seed)
 
     admission_type_id = df['admission_type_id'].values
-    admission_type_id = dropout(admission_type_id, percent*rank[1], seed)
+    admission_type_id = dropout(admission_type_id, percent*rank[2], seed)
 
     #diabetesmed = df['diabetesmed'].values
     #diabetesmed = dropout(diabetesmed, rank[4], seed)
 
-    age = df['age'].values
-    age = dropout(age, percent*rank[2], seed)
-
-    insulin = df['insulin'].values
-    insulin = dropout(insulin, percent*rank[3], seed)
-
     race = df['race'].values
-    race = dropout(race, percent*rank[4], seed)
+    race = dropout(race, percent*rank[3], seed)
+    
+    insulin = df['insulin'].values
+    insulin = dropout(insulin, percent*rank[4], seed)
+
 
     #max_glu_serum = df['max_glu_serum'].values
     #max_glu_serum = dropout(max_glu_serum, rank[8], seed)
@@ -74,23 +76,23 @@ def missing_data_attr(db, N_samples, alpha, seed, percent):
     #a1cresult = df['a1cresult'].values
     #a1cresult = dropout(a1cresult, rank[10], seed)
 
-    change = df['change'].values
-    change = dropout(change, percent*rank[6], seed)
-
     discharge_disposition_id = df['discharge_disposition_id'].values
-    discharge_disposition_id = dropout(discharge_disposition_id, rank[7], seed)
+    discharge_disposition_id = dropout(discharge_disposition_id, percent*rank[6], seed)
+
+    change = df['change'].values
+    change = dropout(change, percent*rank[7], seed)
+
 
     readmitted = df['readmitted'].values
     #readmitted = dropout(readmitted, percent*rank[7], seed)
 
         
-    frame = { 'gender': gender,
+    frame = { 'gender': gender, 'age': age, 
             'admission_type_id': admission_type_id,
-             'age': age, 'insulin': insulin,
-             'race': race,
+             'race': race, 'insulin': insulin,
              'diag_1': diag_1,
-             'change': change,
              'discharge_disposition_id': discharge_disposition_id,
+             'change': change,
             'readmitted': readmitted       
             } 
 
@@ -106,11 +108,11 @@ def missing_data_measure(db, N_samples, alpha, seed, percent):
     number_emergency = df['number_emergency'].values
     number_emergency = dropout(number_emergency, percent*rank[0], seed)
 
-    number_outpatient = df['number_outpatient'].values
-    number_outpatient = dropout(number_outpatient, percent*rank[1], seed)
-
     number_inpatient = df['number_inpatient'].values
-    number_inpatient = dropout(number_inpatient, percent*rank[2], seed)
+    number_inpatient = dropout(number_inpatient, percent*rank[1], seed)
+
+    number_outpatient = df['number_outpatient'].values
+    number_outpatient = dropout(number_outpatient, percent*rank[2], seed)
 
     number_diagnoses = df['number_diagnoses'].values
     number_diagnoses = dropout(number_diagnoses, percent*rank[3], seed)
@@ -128,8 +130,8 @@ def missing_data_measure(db, N_samples, alpha, seed, percent):
     num_lab_procedures = dropout(num_lab_procedures, percent*rank[7], seed)
 
 
-    frame = { 'number_emergency': number_emergency, 'number_outpatient': number_outpatient,
-            'number_inpatient': number_inpatient, 'number_diagnoses': number_diagnoses,
+    frame = { 'number_emergency': number_emergency, 'number_inpatient': number_inpatient, 
+            'number_outpatient': number_outpatient, 'number_diagnoses': number_diagnoses,
              'num_procedures': num_procedures, 'num_medications': num_medications,
              'time_in_hospital': time_in_hospital, 'num_lab_procedures': num_lab_procedures    
             } 
@@ -139,17 +141,17 @@ def missing_data_measure(db, N_samples, alpha, seed, percent):
 
 
 a_columns = ['gender',
-             'admission_type_id',
              'age',
-             'insulin',
+             'admission_type_id',
              'race',
+             'insulin',
              'diag_1',
-             'change',
              'discharge_disposition_id',
+             'change',
              'readmitted']
 m_columns = ['number_emergency',
-             'number_outpatient',
              'number_inpatient',
+             'number_outpatient',
              'number_diagnoses',
              'num_procedures',
              'num_medications',
@@ -157,7 +159,7 @@ m_columns = ['number_emergency',
              'num_lab_procedures']
 
 table_name = 'diabetes'
-connection = pg.connect("dbname=small_experiment_no_missing_predicate_zipf user=postgres password=zenvisage")
+connection = pg.connect("dbname=small_experiment_no_missing_predicate_zipf_v3 user=postgres password=zenvisage")
 db = psql.read_sql("SELECT * FROM " + table_name, connection)
 db.drop(db.columns[[0]], axis=1, inplace=True)
 
@@ -168,8 +170,8 @@ df_measure = df.select_dtypes(['int64']).astype(float)
 df_measure = df_measure.reindex(columns=m_columns)
 
 
-mlist = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
-a_list = [1.1] #, 1.2, 1.3, 1.4, 1.5, 1.7
+mlist = [0.5]#[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
+a_list = [1.3] #, 1.2, 1.3, 1.4, 1.5, 1.7
 N_samples = 784416
 
 print("Data missing export to Postgre")
@@ -187,7 +189,7 @@ for i in mlist:
             table_name2 = "db_" + str(x) + "zipf" + str(y) + "_missing_measure" + str(j + 1)
 
             df = db.copy()
-            new_df_a_m = db.copy()
+            #new_df_a_m = db.copy()
             df_attr = df.select_dtypes(['object'])
             #df_float = df.select_dtypes(['float'])
             df_measure = df.select_dtypes(['int64']).astype(float)
@@ -196,7 +198,7 @@ for i in mlist:
             df_measure_missing = missing_data_measure(df_measure, N_samples, a, j, i)
             new_df_measure = pd.concat([df_attr, df_measure_missing], axis=1, ignore_index=False, sort=False)
 
-            engine = create_engine(r'postgresql+psycopg2://postgres:zenvisage@localhost:5432/small_experiment_no_missing_predicate_zipf')
+            engine = create_engine(r'postgresql+psycopg2://postgres:zenvisage@localhost:5432/small_experiment_no_missing_predicate_zipf_v3')
             c = engine.connect()
             conn = c.connection
 

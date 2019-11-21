@@ -12,14 +12,14 @@ def mean_confidence_interval(data, confidence=0.95):
 
 input_file = 'results/missing_attributes_vs_ideal.csv'
 
-output_plot = '10_missing_attributes_vs_ideal'
+output_plot = '80_missing_attributes_vs_ideal'
 
 # ===============================================================
 # IDEAL VS STANDARD
 
 df = pd.read_csv(input_file, names=['percentage','k','RBO','Jaccard'])
 
-percent = 10
+percent = 80
 #[5, 10, 15, 20, 100, 256]
 k5j = df[(df['k'] == 5) & (df['percentage'] == percent)]
 k5j = k5j['Jaccard']
@@ -150,10 +150,10 @@ ax.fill_between(t, lb0, ub0, color = '#539caf', alpha = 0.4)
 ax.fill_between(t, lb1, ub1, color = '#b65332', alpha = 0.4)
 
 # Label the axes and provide a title
-ax.set_title("Impact of k on Effectiveness, 95% CI, 10 % A missing")
+ax.set_title("Impact of k on Effectiveness, 95% CI, 80 % A missing")
 ax.set_xlabel("k")
 ax.set_ylabel("Effectiveness - Missing on A to Ideal")
-x = [5, 10, 15, 20, 80, 100, 256]
+x = [5, 10, 15, 20, 70, 100, 256]
 xi = list(range(len(x)))
 plt.xticks(xi, x)
 # Display legend
