@@ -73,7 +73,7 @@ db.drop(db.columns[[0]], axis=1, inplace=True)
 
 mlist = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
 size = 4186
-
+engine = create_engine(r'postgresql+psycopg2://postgres:zenvisage@localhost:5432/heart_dataset_random_predicate_slope')
 print("Data missing export to Postgre")
 for i in mlist:
     for j in range(100):
@@ -93,40 +93,40 @@ for i in mlist:
 
         df = db.copy()
         df_a_m = db.copy()
-        df_attr = df.select_dtypes(['object'])
-        df_float = df.select_dtypes(['float'])
-        df_measure = df.select_dtypes(['int64']).astype(float)
-        df_measure['oldpeak'] = df_float['oldpeak']
+        # df_attr = df.select_dtypes(['object'])
+        # df_float = df.select_dtypes(['float'])
+        # df_measure = df.select_dtypes(['int64']).astype(float)
+        # df_measure['oldpeak'] = df_float['oldpeak']
 
-        df_attr = df_attr.drop('slope', 1)
-        df_attr_missing = missing_data_attr(df_attr, size, i, j)
-        df_attr_missing['slope'] = df['slope'].values
-        new_df_attr = pd.concat([df_attr_missing, df_measure], axis=1, ignore_index=False, sort=False)
+        # df_attr = df_attr.drop('slope', 1)
+        # df_attr_missing = missing_data_attr(df_attr, size, i, j)
+        # df_attr_missing['slope'] = df['slope'].values
+        # new_df_attr = pd.concat([df_attr_missing, df_measure], axis=1, ignore_index=False, sort=False)
 
-        df_measure_missing = missing_data_measure(df_measure, size, i, j)
-        new_df_measure = pd.concat([df.select_dtypes(['object']), df_measure_missing], axis=1, ignore_index=False, sort=False)
+        # df_measure_missing = missing_data_measure(df_measure, size, i, j)
+        # new_df_measure = pd.concat([df.select_dtypes(['object']), df_measure_missing], axis=1, ignore_index=False, sort=False)
 
         df_a_m = df_a_m.drop('slope', 1)
         df_a_m_missing = missing_data(df_a_m, size, i, j)
         df_a_m_missing['slope'] = df['slope'].values
-        engine = create_engine(r'postgresql+psycopg2://postgres:zenvisage@localhost:5432/heart_dataset_random_predicate_slope')
-        c = engine.connect()
-        conn = c.connection
-
-        print("Exporting...", table_name1)
-        new_df_attr.to_sql(table_name1, engine)
-        #new_df_attr.dropna(inplace=True)
-        #new_df_attr.to_sql(table_namea, engine)
-
-
-        print("Exporting...", table_name2)
         
-        new_df_measure.to_sql(table_name2, engine)
-        #new_df_measure.dropna(inplace=True)
-        #new_df_measure.to_sql(table_nameb, engine)
+        # c = engine.connect()
+        # conn = c.connection
+
+        # print("Exporting...", table_name1)
+        # new_df_attr.to_sql(table_name1, engine)
+        # #new_df_attr.dropna(inplace=True)
+        # #new_df_attr.to_sql(table_namea, engine)
+
+
+        # print("Exporting...", table_name2)
+        
+        # new_df_measure.to_sql(table_name2, engine)
+        # #new_df_measure.dropna(inplace=True)
+        # #new_df_measure.to_sql(table_nameb, engine)
 
         print("Exporting...", table_name3)
         
         df_a_m_missing.to_sql(table_name3, engine)
         #new_df_a_m.dropna(inplace=True)
-        #new_df_a_m.to_sql(table_namec, engine)
+       
