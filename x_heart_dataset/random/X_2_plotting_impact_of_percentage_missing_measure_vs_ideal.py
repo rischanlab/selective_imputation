@@ -10,7 +10,7 @@ def mean_confidence_interval(data, confidence=0.95):
     h = se * scipy.stats.t.ppf((1 + confidence) / 2., n-1)
     return m, m-h, m+h
 
-input_file = 'results/missing_measures_vs_ideal.csv'
+input_file = 'results/missing_attributes_vs_ideal.csv'
 
 output_plot = 'all_percentage_missing_measures_vs_ideal'
 

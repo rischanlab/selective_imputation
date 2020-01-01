@@ -20,7 +20,16 @@ def convert_to_one(item):
         S.append(((''.join(i))))
     return S
 
-
+def get_sim_topk_aggregate(k, file):
+    my_sheet = 'Sheet1'
+    file_name = file  # name of your excel file
+    df = read_excel(file_name, sheet_name=my_sheet)
+    df.drop(df.columns[[0,4]], axis=1, inplace=True)
+    df = df.drop(df[df.Attributes == 'num'].index)
+    df = df.tail(k).values.tolist()
+    x = convert_to_one(df)
+    return x
+    
 def get_topk_aggregate(k, file):
     my_sheet = 'Sheet1'
     file_name = file  # name of your excel file

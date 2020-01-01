@@ -847,7 +847,7 @@ ax.fill_between(t, lb5, ub5, color = '#87888a', alpha = 0.4)
 ax.set_title("Impact of k on Effectiveness, 95% CI, 10 % missing")
 ax.set_xlabel("k")
 ax.set_ylabel("Effectiveness Jaccard- Missing to Ideal")
-x = [1,2,3,4,5,6,7,8,9,10,11,12,20,30,40,50,60,66, 192]
+x = [1,2,3,4,5,6,7,8,9,10,11,12,13,20,30,40,50,60,66, 192]
 xi = list(range(len(x)))
 plt.xticks(xi, x)
 # Display legend

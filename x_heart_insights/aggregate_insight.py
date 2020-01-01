@@ -80,3 +80,44 @@ def generate_correlation_insights(data):
         S.append(((''.join(i))))
     S
     return S
+
+
+def generate_correlation_insights_cum(data,k):
+    dataCorr = data.corr(method='pearson')
+    dataCorr = dataCorr[abs(dataCorr) >= 0.01].stack().reset_index()
+    dataCorr = dataCorr[dataCorr['level_0'].astype(str) != dataCorr['level_1'].astype(str)]
+
+    # filtering out lower/upper triangular duplicates
+    dataCorr['ordered-cols'] = dataCorr.apply(lambda x: '-'.join(sorted([x['level_0'], x['level_1']])), axis=1)
+    dataCorr = dataCorr.drop_duplicates(['ordered-cols'])
+    dataCorr.drop(['ordered-cols'], axis=1, inplace=True)
+
+    dataCorr.columns = ['a','b','score']
+    topk = dataCorr.sort_values(by=['score'], ascending=False)
+    topk['new_score'] = topk['score'] + 1
+    topk.drop(['score'], axis = 1, inplace=True)
+    topk = topk.sort_values(by=['new_score'], ascending=False)
+    topk = topk.head(k)
+    return topk['new_score'].sum()
+    
+
+def generate_skewness_insights_cum(data, k):
+    topk = data.skew(axis=0).sort_values(ascending=False)
+    topk = topk.to_frame().reset_index()
+    topk.columns = ['atr', 'skew']
+    minskew = topk.tail(1)['skew'].tolist()[0]
+    topk['new_score'] = topk['skew'] + abs(minskew)
+    topk.drop(['skew'], axis = 1, inplace = True)
+    topk = topk.head(k)
+    return topk['new_score'].sum()
+
+
+def generate_kurt_insights_cum(data, k):
+    topk = data.kurt(axis=0).sort_values(ascending=False)
+    topk = topk.to_frame().reset_index()
+    topk.columns = ['atr', 'kurt']
+    minskew = topk.tail(1)['kurt'].tolist()[0]
+    topk['new_score'] = topk['kurt'] + abs(minskew)
+    topk.drop(['kurt'], axis = 1, inplace = True)
+    topk = topk.head(k)
+    return topk['new_score'].sum()

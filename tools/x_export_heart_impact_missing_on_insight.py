@@ -65,13 +65,14 @@ def missing_data_measure(db, size, percentage, seed):
 
 
 table_name = 'heart'
-connection = pg.connect("dbname=heart_dataset_random user=postgres password=zenvisage")
+connection = pg.connect("dbname=aheart_dataset_random user=postgres password=zenvisage")
 db = psql.read_sql("SELECT * FROM " + table_name, connection)
 db.drop(db.columns[[0]], axis=1, inplace=True)
 
 
-mlist = [0.8] #0.2,0.3,0.4,
+mlist = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
 size = 4186
+engine = create_engine(r'postgresql+psycopg2://postgres:zenvisage@localhost:5432/aheart_dataset_random')
 
 print("Data missing export to Postgre")
 for i in mlist:
@@ -82,9 +83,9 @@ for i in mlist:
         #print(df.columns.to_series().groupby(df.dtypes).groups)
         # db missing is db with row contains missing drop 
         # db NaN is db with row contain missing keep 
-        #table_name1 = "db_" + str(x) + "rand_missing_attr" + str(j+1)
-        #table_name2 = "db_" + str(x) + "rand_missing_measure" + str(j + 1)
-        table_name3 = "db_" + str(x) + "rand_missing_a_m" + str(j + 37)
+        table_name1 = "db_" + str(x) + "rand_missing_attr" + str(j+1)
+        table_name2 = "db_" + str(x) + "rand_missing_measure" + str(j + 1)
+        table_name3 = "db_" + str(x) + "rand_missing_a_m" + str(j + 1)
 
         #table_namea = "db_" + str(x) + "dropnan_attr" + str(j+1)
         #table_nameb = "db_" + str(x) + "dropnan_measure" + str(j + 1)
@@ -92,37 +93,36 @@ for i in mlist:
 
         df = db.copy()
         df_a_m = db.copy()
-        # df_attr = df.select_dtypes(['object'])
-        # df_float = df.select_dtypes(['float'])
-        # df_measure = df.select_dtypes(['int64']).astype(float)
-        # df_measure['oldpeak'] = df_float['oldpeak']
+        df_attr = df.select_dtypes(['object'])
+        df_float = df.select_dtypes(['float'])
+        df_measure = df.select_dtypes(['int64']).astype(float)
+        df_measure['oldpeak'] = df_float['oldpeak']
 
-        # df_attr = df_attr.drop('num', 1)
-        # df_attr_missing = missing_data_attr(df_attr, size, i, j)
-        # df_attr_missing['num'] = df['num'].values
-        # new_df_attr = pd.concat([df_attr_missing, df_measure], axis=1, ignore_index=False, sort=False)
+        df_attr = df_attr.drop('num', 1)
+        df_attr_missing = missing_data_attr(df_attr, size, i, j)
+        df_attr_missing['num'] = df['num'].values
+        new_df_attr = pd.concat([df_attr_missing, df_measure], axis=1, ignore_index=False, sort=False)
 
-        # df_measure_missing = missing_data_measure(df_measure, size, i, j)
-        # new_df_measure = pd.concat([df.select_dtypes(['object']), df_measure_missing], axis=1, ignore_index=False, sort=False)
+        df_measure_missing = missing_data_measure(df_measure, size, i, j)
+        new_df_measure = pd.concat([df.select_dtypes(['object']), df_measure_missing], axis=1, ignore_index=False, sort=False)
 
         df_a_m = df_a_m.drop('num', 1)
         df_a_m_missing = missing_data(df_a_m, size, i, j)
         df_a_m_missing['num'] = df['num'].values
-        engine = create_engine(r'postgresql+psycopg2://postgres:zenvisage@localhost:5432/heart_dataset_random')
-        c = engine.connect()
-        conn = c.connection
-
-        # print("Exporting...", table_name1)
-        # new_df_attr.to_sql(table_name1, engine)
-        # #new_df_attr.dropna(inplace=True)
-        # #new_df_attr.to_sql(table_namea, engine)
-
-
-        # print("Exporting...", table_name2)
         
-        # new_df_measure.to_sql(table_name2, engine)
-        #new_df_measure.dropna(inplace=True)
-        #new_df_measure.to_sql(table_nameb, engine)
+
+
+        print("Exporting...", table_name1)
+        new_df_attr.to_sql(table_name1, engine)
+        #new_df_attr.dropna(inplace=True)
+        #new_df_attr.to_sql(table_namea, engine)
+
+
+        print("Exporting...", table_name2)
+        
+        new_df_measure.to_sql(table_name2, engine)
+        # new_df_measure.dropna(inplace=True)
+        # new_df_measure.to_sql(table_nameb, engine)
 
         print("Exporting...", table_name3)
         

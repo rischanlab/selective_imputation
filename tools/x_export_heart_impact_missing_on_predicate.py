@@ -42,7 +42,7 @@ predicate = 'num'
 mlist = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
 #mlist = [0.8]
 size = 299
-engine = create_engine(r'postgresql+psycopg2://postgres:zenvisage@localhost:5432/heart_missing_predicate')
+engine = create_engine(r'postgresql+psycopg2://postgres:zenvisage@localhost:5432/aheart_missing_predicate')
 print("Data missing export to Postgre")
 for i in mlist:
     for j in range(100):
@@ -65,4 +65,4 @@ for i in mlist:
 
         print("Exporting...", table_name)
         new_df.to_sql(table_name, engine)
-        #new_df_attr.dropna(inplace=Tr
+        #new_df_attr.dropna(inplace=True)

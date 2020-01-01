@@ -5,7 +5,7 @@ import pandas.io.sql as psql
 
 from sqlalchemy import create_engine
 
-engine = create_engine(r'postgresql+psycopg2://postgres:zenvisage@localhost:5432/heart_dataset_random')
+engine = create_engine(r'postgresql+psycopg2://postgres:zenvisage@localhost:5432/aheart_dataset_random_predicate_exang')
 
 conn = pg.connect("dbname=seedb_data user=postgres password=zenvisage")
 df = psql.read_sql("SELECT * FROM heart_disease", conn)

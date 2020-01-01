@@ -207,9 +207,9 @@ ax.fill_between(t, lb0, ub0, color = '#539caf', alpha = 0.4)
 ax.fill_between(t, lb1, ub1, color = '#b65332', alpha = 0.4)
 
 # Label the axes and provide a title
-ax.set_title("Impact of percentage of missing on Effectiveness, 95% CI, k = 5")
+ax.set_title("Impact of missing on Effectiveness, k = 5")
 ax.set_xlabel("percentage of missing")
-ax.set_ylabel("Effectiveness - Missing Predicate to Ideal")
+ax.set_ylabel("Effectiveness - Missing Predicate")
 x = [0, 10, 20, 30, 40, 50, 60, 70, 80]
 xi = list(range(len(x)))
 plt.xticks(xi, x)

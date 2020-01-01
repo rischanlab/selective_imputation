@@ -130,4 +130,4 @@ for i in mlist:
         
         df_a_m_missing.to_sql(table_name3, engine)
         #new_df_a_m.dropna(inplace=True)
-        
+        #new_df_a_m.to_sql(table_namec, engine)

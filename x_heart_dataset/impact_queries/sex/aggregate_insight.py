@@ -1,8 +1,11 @@
 import csv
 import rbo_func as rbo
+from statistics import mean
+import numpy as np
 import pandas as pd
 from pandas import read_excel
 import glob
+
 
 
 def rboresult(groundtruth, new, p=0.95):
@@ -20,13 +23,53 @@ def convert_to_one(item):
         S.append(((''.join(i))))
     return S
 
+def get_topk_gap_disease(k, file):
+    my_sheet = 'Sheet1'
+    file_name = file  # name of your excel file
+    df = read_excel(file_name, sheet_name=my_sheet)
+    df = df.drop(df[df.Attributes == 'num'].index)
+    df.drop(df.columns[[0]], axis=1, inplace=True)
+    data = df['Utility'].head(k).values.tolist()
+    new_list = np.diff(data)
+    return mean(abs(new_list)) # shows headers with top 5 rows
+
+def get_topk_gap_cp(k, file):
+    my_sheet = 'Sheet1'
+    file_name = file  # name of your excel file
+    df = read_excel(file_name, sheet_name=my_sheet)
+    df = df.drop(df[df.Attributes == 'cp'].index)
+    df.drop(df.columns[[0]], axis=1, inplace=True)
+    data = df['Utility'].head(k).values.tolist()
+    new_list = np.diff(data)
+    return mean(abs(new_list))
+
+def get_topk_gap_sex(k, file):
+    my_sheet = 'Sheet1'
+    file_name = file  # name of your excel file
+    df = read_excel(file_name, sheet_name=my_sheet)
+    df = df.drop(df[df.Attributes == 'sex'].index)
+    df.drop(df.columns[[0]], axis=1, inplace=True)
+    data = df['Utility'].head(k).values.tolist()
+    new_list = np.diff(data)
+    return mean(abs(new_list))
+
+def get_topk_gap_slope(k, file):
+    my_sheet = 'Sheet1'
+    file_name = file  # name of your excel file
+    df = read_excel(file_name, sheet_name=my_sheet)
+    df = df.drop(df[df.Attributes == 'slope'].index)
+    df.drop(df.columns[[0]], axis=1, inplace=True)
+    data = df['Utility'].head(k).values.tolist()
+    new_list = np.diff(data)
+    return mean(abs(new_list))
+
 
 def get_topk_aggregate(k, file):
     my_sheet = 'Sheet1'
     file_name = file  # name of your excel file
     df = read_excel(file_name, sheet_name=my_sheet)
     df.drop(df.columns[[0,4]], axis=1, inplace=True)
-    df = df.drop(df[df.Attributes == 'num'].index)
+    df = df.drop(df[df.Attributes == 'sex'].index)
     df = df.head(k).values.tolist()
     x = convert_to_one(df)
     return x # shows headers with top 5 rows
@@ -36,7 +79,7 @@ def get_sim_topk_aggregate(k, file):
     file_name = file  # name of your excel file
     df = read_excel(file_name, sheet_name=my_sheet)
     df.drop(df.columns[[0,4]], axis=1, inplace=True)
-    df = df.drop(df[df.Attributes == 'num'].index)
+    df = df.drop(df[df.Attributes == 'sex'].index)
     df = df.tail(k).values.tolist()
     x = convert_to_one(df)
     return x

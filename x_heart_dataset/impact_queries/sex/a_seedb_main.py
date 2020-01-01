@@ -2,7 +2,7 @@
 from a_seedb_function import SeeDB
 from a_seedb_db import data
 import psycopg2
-conn = psycopg2.connect("dbname=heart_dataset_random_predicate_sex user=postgres password=zenvisage")
+conn = psycopg2.connect("dbname=aheart_dataset_random_predicate_sex user=postgres password=zenvisage")
 
 cursor = conn.cursor()
 cursor.execute("""SELECT table_name FROM information_schema.tables
@@ -48,6 +48,9 @@ if __name__ == "__main__":
     for i in mytable_db:
         db, table, data_set = data(i[0], atr, measure, func)
         print("running with db {}".format(i[0]))
-        framework = SeeDB(db,data_set,table,top_k)
-        framework.main()
+        try:
+            framework = SeeDB(db, data_set, table, top_k)
+            framework.main()
+        except:
+            pass  # doing nothing on exception
         print("done")

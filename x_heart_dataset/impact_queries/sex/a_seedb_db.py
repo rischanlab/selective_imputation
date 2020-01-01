@@ -3,7 +3,7 @@ import itertools
 
 
 def data(table, atr, measure, func):
-    db_name = 'heart_dataset_random_predicate_sex'
+    db_name = 'aheart_dataset_random_predicate_sex'
     table = table
     prod = list(itertools.product(func, measure))
     data_set = {i: prod for i in atr}

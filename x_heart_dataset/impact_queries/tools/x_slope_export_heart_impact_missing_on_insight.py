@@ -73,7 +73,7 @@ db.drop(db.columns[[0]], axis=1, inplace=True)
 
 mlist = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
 size = 4186
-engine = create_engine(r'postgresql+psycopg2://postgres:zenvisage@localhost:5432/heart_dataset_random_predicate_slope')
+engine = create_engine(r'postgresql+psycopg2://postgres:zenvisage@localhost:5432/aheart_dataset_random_predicate_slope')
 print("Data missing export to Postgre")
 for i in mlist:
     for j in range(100):
@@ -129,4 +129,4 @@ for i in mlist:
         
         df_a_m_missing.to_sql(table_name3, engine)
         #new_df_a_m.dropna(inplace=True)
-       
+        #new_df_a_m.to_sql(table_namec, engine)
